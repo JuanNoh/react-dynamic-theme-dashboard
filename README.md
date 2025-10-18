@@ -1,5 +1,9 @@
 # Brand UI — Generador de Paleta Dinámica (React19 + Tailwind v4)
 
+[![Brand UI — captura](./docs/cover.png)](https://react-dynamic-theme-dashboard.vercel.app/)
+
+> 🔗 **Demo en Vercel:** https://react-dynamic-theme-dashboard.vercel.app/
+
 > UI kit personal con **tematización dinámica** en tiempo real: define un color base, genera una paleta completa (`50..950`) y aplica **design tokens** a toda la interfaz con Tailwind CSS v4.  
 > Arquitectura limpia, componentes reutilizables y stack moderno **React 19 + Vite + TypeScript**.
 
