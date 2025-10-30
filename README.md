@@ -1,6 +1,6 @@
 # Brand UI — Generador de Paleta Dinámica (React19 + Tailwind v4)
 
-[![Brand UI — captura](./docs/cover.png)](https://react-dynamic-theme-dashboard.vercel.app/)
+[![Brand UI — captura](./docs/cover.jpg)](https://react-dynamic-theme-dashboard.vercel.app/)
 
 > 🔗 **Demo en Vercel:** https://react-dynamic-theme-dashboard.vercel.app/
 
