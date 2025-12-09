@@ -1,15 +1,18 @@
-import { type Palette } from '@/types/palette';
+import { type Palette, SHADE_KEYS } from "@/types/palette";
 
-export function applyPrimaryPaletteToRoot(palette: Palette) {
+export function applyPalettesToRoot(
+  primary: Palette,
+  secondary: Palette | null = null,
+) {
   const root = document.documentElement;
-  for (const [k, color] of Object.entries(palette)) {
-    root.style.setProperty(`--color-primary-${k}`, color);
-  }
-}
 
-export function toThemeBlock(palette: Palette): string {
-  const lines = Object.entries(palette)
-    .map(([k, color]) => `  --color-primary-${k}: ${color};`)
-    .join('\n');
-  return `@theme {\n${lines}\n}`;
+  SHADE_KEYS.forEach((key) => {
+    root.style.setProperty(`--color-primary-${key}`, primary[key]);
+  });
+
+  if (secondary) {
+    SHADE_KEYS.forEach((key) => {
+      root.style.setProperty(`--color-secondary-${key}`, secondary[key]);
+    });
+  }
 }
