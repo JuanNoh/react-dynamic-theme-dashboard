@@ -24,7 +24,7 @@ export default function BrandForm() {
         </div>
 
         <h1 className="text-5xl font-extrabold tracking-tight text-balance text-slate-900 drop-shadow-sm sm:text-6xl md:text-7xl dark:text-white">
-          Generador de
+          Generador de{" "}
           <span className="bg-gradient-to-b from-slate-700 to-black bg-clip-text text-transparent dark:from-white dark:via-slate-200 dark:to-slate-500">
             Paletas
           </span>
@@ -48,38 +48,41 @@ export default function BrandForm() {
                 setKeywords(e.target.value);
                 if (error) setError(null);
               }}
-              placeholder="Describe tu marca (ej. Fintech moderna, Eco-friendly...)"
-              className="w-full rounded-2xl border border-slate-200 bg-white/80 py-5 pr-40 pl-6 text-lg text-slate-900 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-500/20 focus:outline-none dark:border-white/10 dark:bg-[#0B1120]/90 dark:text-white dark:shadow-black/50 dark:placeholder:text-slate-500 dark:focus:border-white/30 dark:focus:ring-white/20"
+              placeholder="Describe tu marca..."
+              className="w-full rounded-2xl border border-slate-200 bg-white/80 py-5 pr-16 pl-6 text-lg text-slate-900 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-500/20 focus:outline-none sm:pr-40 dark:border-white/10 dark:bg-[#0B1120]/90 dark:text-white dark:shadow-black/50 dark:placeholder:text-slate-500 dark:focus:border-white/30 dark:focus:ring-white/20"
               disabled={loading}
             />
 
             <button
               type="submit"
               disabled={loading || !hasKeywords}
-              className="absolute top-2 right-2 bottom-2 flex items-center gap-2 rounded-xl bg-slate-900 px-6 font-bold text-white shadow-lg transition-all hover:scale-[1.02] hover:bg-black active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-white dark:text-black dark:hover:bg-slate-200"
+              className="absolute top-2 right-2 bottom-2 flex items-center gap-2 rounded-xl bg-slate-900 px-3 font-bold text-white shadow-lg transition-all hover:scale-[1.02] hover:bg-black active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 sm:px-6 dark:bg-white dark:text-black dark:hover:bg-slate-200"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <>
-                  Generar
-                  <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+                  <span className="hidden sm:inline">Generar</span>
+                  <ArrowRight
+                    className="h-5 w-5 sm:h-4 sm:w-4"
+                    strokeWidth={2.5}
+                  />
                 </>
               )}
             </button>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 px-2 text-sm text-slate-500 md:flex-row dark:text-slate-400">
+        <div className="mt-6">
           {!error && (
             <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-              <span className="mr-1 text-xs font-medium opacity-70">
+              <span className="xs:inline mr-1 hidden text-xs font-medium opacity-70">
                 Pruébalo:
               </span>
               {[
                 { label: "🌱 Eco-Friendly", val: "Eco Friendly Plant Shop" },
-                { label: "🚀 Startup SaaS", val: "SaaS Startup AI" },
-                { label: "🍣 Sushi Premium", val: "Sushi Restaurant Premium" },
+                { label: "🚀 SaaS", val: "SaaS Startup AI" }, // Texto acortado
+                { label: "🍣 Sushi", val: "Sushi Restaurant Premium" }, // Texto acortado visualmente
               ].map((item) => (
                 <button
                   key={item.label}

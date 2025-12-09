@@ -3,11 +3,12 @@ import SwatchGrid from "@/components/palette/SwatchGrid";
 import BrandForm from "@/components/palette/BrandFormTwo";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import DashboardPreview from "@/components/preview/DashboardPreview";
+import MobilePreview from "@/components/preview/MobilePreview";
 
 export default function PalettePage() {
   return (
     <AppLayout>
-      <div className="min-h-screen px-4 pt-36 pb-24">
+      <div className="min-h-screen px-4 pt-28 pb-24">
         <section className="relative z-10 mx-auto mb-16 max-w-4xl">
           <BrandForm />
         </section>
@@ -58,7 +59,15 @@ export default function PalettePage() {
             </p>
           </div>
           <div className="px-2 sm:px-0">
-            <DashboardPreview />
+            <div className="mt-10">
+              <div className="hidden lg:block">
+                <DashboardPreview />
+              </div>
+
+              <div className="block lg:hidden">
+                <MobilePreview />
+              </div>
+            </div>
           </div>
         </section>
       </div>
