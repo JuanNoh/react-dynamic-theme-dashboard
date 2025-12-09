@@ -1,15 +1,42 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary-50: #e3dcf1;
-  --color-primary-100: #c4b6e1;
-  --color-primary-200: #a491d0;
-  --color-primary-300: #836dc0;
-  --color-primary-400: #604aaf;
-  --color-primary-500: #36299e;
-  --color-primary-600: #312486;
-  --color-primary-700: #2c206f;
-  --color-primary-800: #261b59;
-  --color-primary-900: #201744;
-  --color-primary-950: #1a1230;
+  --color-primary-50: #fff9f9;
+  --color-primary-100: #fff5f4;
+  --color-primary-200: #ffe8e5;
+  --color-primary-300: #ffd2cd;
+  --color-primary-400: #ffa69d;
+  --color-primary-500: #ff8579;
+  --color-primary-600: #ff6f61;
+  --color-primary-700: #fd1600;
+  --color-primary-800: #9b0e00;
+  --color-primary-900: #6a0900;
+  --color-primary-950: #380500;
+
+  --color-secondary-50: #f8fbfe;
+  --color-secondary-100: #f2f7fd;
+  --color-secondary-200: #e2edfa;
+  --color-secondary-300: #c6dcf6;
+  --color-secondary-400: #8fbaed;
+  --color-secondary-500: #66a1e6;
+  --color-secondary-600: #4a90e2;
+  --color-secondary-700: #1e66ba;
+  --color-secondary-800: #123e72;
+  --color-secondary-900: #0c2a4e;
+  --color-secondary-950: #071729;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
