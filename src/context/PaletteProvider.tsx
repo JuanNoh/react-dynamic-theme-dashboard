@@ -7,6 +7,7 @@ import {
 } from "react";
 import { DEFAULT_PALETTE } from "@/constants/defaults";
 import { applyPalettesToRoot } from "@/lib/themeVars";
+import { generateLocalPalette } from "@/lib/localPalette";
 import { PaletteContext, type PaletteCtx } from "@/context/PaletteContext";
 import type {
   AIInsight,
@@ -43,6 +44,9 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
 
   const updateBaseColor = useCallback((color: string) => {
     setBaseColor(color);
+    // Regeneramos la escala en local para que el picker manual sí se sienta vivo;
+    // cuando la paleta viene de la IA o del historial, su setPalette pisa esta en el mismo tick
+    setPalette(generateLocalPalette(color));
   }, []);
 
   useEffect(() => {
