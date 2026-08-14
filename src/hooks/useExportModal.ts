@@ -4,7 +4,7 @@ import type { ToastType } from "@/components/ui/Toast";
 import chroma from "chroma-js";
 
 type Tab = "css" | "tailwind-v3" | "tailwind-v4" | "json";
-type ColorFormat = "hex" | "oklch" | "hsl" | "rgb";
+export type ColorFormat = "hex" | "oklch" | "hsl" | "rgb";
 
 export function useExportModal(initialTab: Tab = "tailwind-v4") {
   const { palette, secondaryPalette, baseColor } = usePalette();

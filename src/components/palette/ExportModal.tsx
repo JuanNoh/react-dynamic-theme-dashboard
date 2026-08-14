@@ -1,4 +1,4 @@
-import { useExportModal } from "@/hooks/useExportModal";
+import { useExportModal, type ColorFormat } from "@/hooks/useExportModal";
 import Toast from "../ui/Toast";
 import { X, Copy, Check, FileCode, Hash } from "lucide-react";
 
@@ -75,7 +75,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
             <Hash className="h-4 w-4 text-slate-400" />
             <select
               value={format}
-              onChange={(e) => setFormat(e.target.value as any)}
+              onChange={(e) => setFormat(e.target.value as ColorFormat)}
               className="cursor-pointer border-none bg-transparent py-0 pr-8 text-xs font-medium text-slate-700 outline-none focus:ring-0 dark:text-slate-300"
             >
               <option value="hex">HEX</option>
