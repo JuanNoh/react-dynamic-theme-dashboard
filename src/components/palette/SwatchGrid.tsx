@@ -1,21 +1,29 @@
 import { motion } from "motion/react";
 import { useSwatchGrid } from "@/hooks/useSwatchGrid";
 import { usePalette } from "@/context/usePalette";
-import { type Palette, SHADE_KEYS } from "@/types/palette";
+import { type Palette, type ShadeKey, SHADE_KEYS } from "@/types/palette";
 import { formatRatio, getTintedText } from "@/lib/contrast";
-import { Check, Copy, Pin } from "lucide-react";
+import { Check, Copy, Pencil, Pin } from "lucide-react";
 
 interface SwatchGridProps {
   palette?: Palette;
+  editing?: boolean; // tocar una tarjeta la selecciona en vez de copiarla
+  selectedShade?: ShadeKey | null;
+  onSelectShade?: (shade: ShadeKey) => void;
 }
 
-export default function SwatchGrid({ palette: propPalette }: SwatchGridProps) {
+export default function SwatchGrid({
+  palette: propPalette,
+  editing = false,
+  selectedShade = null,
+  onSelectShade,
+}: SwatchGridProps) {
   const { palette, copiedKey, handleCopy } = useSwatchGrid({
     palette: propPalette,
   });
-  const { baseShade, scaleOptions, setScaleOptions } = usePalette();
+  const { baseShade, scaleOptions, setScaleOptions, shadeEdits } = usePalette();
   // En modo APCA el tono de la marca lo decide su contraste
-  const canPin = !propPalette && scaleOptions.mode !== "apca";
+  const canPin = !propPalette && !editing && scaleOptions.mode !== "apca";
 
   return (
     <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(90px,1fr))] gap-3">
@@ -37,16 +45,28 @@ export default function SwatchGrid({ palette: propPalette }: SwatchGridProps) {
             className="group relative h-32 w-full rounded-2xl transition-[transform,box-shadow] duration-300 ease-out hover:z-10 hover:-translate-y-1 hover:shadow-lg"
             initial={false}
             animate={{ backgroundColor: color, color: text.color }}
-            transition={{ duration: 0.45, delay: idx * 0.025, ease: "easeOut" }}
+            // Al editar el color sigue a la barra, sin la ola
+            transition={
+              editing
+                ? { duration: 0 }
+                : { duration: 0.45, delay: idx * 0.025, ease: "easeOut" }
+            }
           >
             <button
               type="button"
-              onClick={() => handleCopy(color, k)}
-              title={`Copiar ${color}`}
+              onClick={() =>
+                editing ? onSelectShade?.(k) : handleCopy(color, k)
+              }
+              aria-pressed={editing ? selectedShade === k : undefined}
+              title={editing ? `Editar el tono ${k}` : `Copiar ${color}`}
               className="focus:ring-primary-500 relative flex h-full w-full cursor-pointer flex-col justify-between rounded-2xl p-3 text-left focus:ring-2 focus:outline-none"
             >
               <div
-                className={`absolute inset-0 rounded-2xl ring-1 ring-inset ${ringColorClass} pointer-events-none`}
+                className={`pointer-events-none absolute inset-0 rounded-2xl ring-inset ${
+                  editing && selectedShade === k
+                    ? "ring-2 ring-current"
+                    : `ring-1 ${ringColorClass}`
+                }`}
               />
 
               <div className="flex w-full flex-col items-start gap-0.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
@@ -59,7 +79,9 @@ export default function SwatchGrid({ palette: propPalette }: SwatchGridProps) {
               </div>
 
               <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-                {isCopied ? (
+                {editing ? (
+                  <Pencil className="h-6 w-6" strokeWidth={2} />
+                ) : isCopied ? (
                   <Check className="h-6 w-6" />
                 ) : (
                   <Copy className="h-6 w-6" strokeWidth={2} />
@@ -75,6 +97,13 @@ export default function SwatchGrid({ palette: propPalette }: SwatchGridProps) {
                     />
                   )}
                   {k}
+                  {shadeEdits[k] && !propPalette && (
+                    <Pencil
+                      className="h-3 w-3"
+                      strokeWidth={2.5}
+                      aria-label="Editado"
+                    />
+                  )}
                 </span>
                 <code className="font-mono text-[11px] uppercase opacity-80">
                   {isCopied ? "OK" : color.replace("#", "")}

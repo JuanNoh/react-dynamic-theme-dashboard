@@ -6,7 +6,7 @@ import type {
   LandingCopy,
   HistoryItem,
 } from "@/types/palette";
-import type { ScaleOptions } from "@/lib/localPalette";
+import type { ScaleOptions, ShadeEdits } from "@/lib/localPalette";
 
 export interface PaletteCtx {
   baseColor: string;
@@ -19,6 +19,9 @@ export interface PaletteCtx {
   baseShade: ShadeKey | null; // tono donde quedó el color base
   scaleOptions: ScaleOptions;
   setScaleOptions: (patch: ScaleOptions) => void;
+
+  shadeEdits: ShadeEdits; // retoques a mano encima de la escala
+  setShadeEdits: (edits: ShadeEdits) => void;
 
   includeStatus: boolean; // sumar los colores de estado a la exportación
   setIncludeStatus: (include: boolean) => void;

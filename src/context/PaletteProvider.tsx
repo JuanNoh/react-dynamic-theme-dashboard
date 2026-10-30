@@ -8,7 +8,14 @@ import {
 } from "react";
 import { DEFAULT_BASE_COLOR } from "@/constants/defaults";
 import { applyPalettesToRoot } from "@/lib/themeVars";
-import { generateLocalPalette, type ScaleOptions } from "@/lib/localPalette";
+import {
+  applyShadeEdits,
+  cleanShadeEdits,
+  generateLocalPalette,
+  generateLocalScale,
+  type ScaleOptions,
+  type ShadeEdits,
+} from "@/lib/localPalette";
 import { PaletteContext, type PaletteCtx } from "@/context/PaletteContext";
 import {
   SHADE_KEYS,
@@ -27,6 +34,8 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
   // Espejos para regenerar desde callbacks estables sin depender del render
   const baseColorRef = useRef(baseColor);
   const scaleOptionsRef = useRef(scaleOptions);
+  const [shadeEdits, setShadeEditsState] = useState<ShadeEdits>({});
+  const shadeEditsRef = useRef(shadeEdits);
   const [secondaryPalette, setSecondaryPalette] = useState<Palette | null>(
     null,
   );
@@ -57,17 +66,37 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
   const updateBaseColor = useCallback((color: string) => {
     baseColorRef.current = color;
     setBaseColor(color);
+    // Los retoques eran de la escala anterior: con otro color ya no aplican
+    shadeEditsRef.current = {};
+    setShadeEditsState({});
     // La escala siempre sale del motor local con los ajustes vigentes (tono
     // fijado, modo APCA); sólo el historial la pisa con su foto guardada
     setPalette(generateLocalPalette(color, scaleOptionsRef.current));
   }, []);
 
-  const setScaleOptions = useCallback((patch: ScaleOptions) => {
-    const next = { ...scaleOptionsRef.current, ...patch };
-    scaleOptionsRef.current = next;
-    setScaleOptionsState(next);
-    setPalette(generateLocalPalette(baseColorRef.current, next));
+  // Rearma la escala con sus ajustes y los retoques que sigan aplicando
+  const rebuild = useCallback((options: ScaleOptions, edits: ShadeEdits) => {
+    const scale = generateLocalScale(baseColorRef.current, options);
+    const cleanEdits = cleanShadeEdits(edits, scale.baseShade);
+    shadeEditsRef.current = cleanEdits;
+    setShadeEditsState(cleanEdits);
+    setPalette(applyShadeEdits(scale, cleanEdits));
   }, []);
+
+  const setScaleOptions = useCallback(
+    (patch: ScaleOptions) => {
+      const next = { ...scaleOptionsRef.current, ...patch };
+      scaleOptionsRef.current = next;
+      setScaleOptionsState(next);
+      rebuild(next, shadeEditsRef.current);
+    },
+    [rebuild],
+  );
+
+  const setShadeEdits = useCallback(
+    (edits: ShadeEdits) => rebuild(scaleOptionsRef.current, edits),
+    [rebuild],
+  );
 
   const baseShade = useMemo(
     () =>
@@ -115,6 +144,8 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       baseShade,
       scaleOptions,
       setScaleOptions,
+      shadeEdits,
+      setShadeEdits,
       includeStatus,
       setIncludeStatus,
       brandName,
@@ -135,6 +166,8 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       baseShade,
       scaleOptions,
       setScaleOptions,
+      shadeEdits,
+      setShadeEdits,
       includeStatus,
       brandName,
       aiInsight,

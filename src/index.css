@@ -255,6 +255,59 @@
   opacity: calc(1 - var(--fila) * 3);
 }
 
+/* Barras del editor de tonos: pista pintada con lo que pasaría al moverlas y
+   perilla blanca en cápsula. El área táctil es más alta que la pista. */
+.deslizador {
+  width: 100%;
+  height: 44px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.deslizador::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--pista);
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+.deslizador::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--pista);
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+.deslizador::-webkit-slider-thumb {
+  width: 30px;
+  height: 20px;
+  margin-top: -5px;
+  border-radius: 999px;
+  appearance: none;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.14),
+    0 2px 6px rgb(0 0 0 / 0.25);
+}
+
+.deslizador::-moz-range-thumb {
+  width: 30px;
+  height: 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.14),
+    0 2px 6px rgb(0 0 0 / 0.25);
+}
+
+.deslizador:focus-visible {
+  border-radius: 999px;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
 /* Mini abanicos de las paletas populares */
 .tarjeta {
   --abre: 1;

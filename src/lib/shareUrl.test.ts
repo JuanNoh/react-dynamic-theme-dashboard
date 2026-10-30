@@ -31,4 +31,16 @@ describe("link compartido", () => {
       mode: "tailwind",
     });
   });
+
+  it("lleva las ediciones de ida y vuelta", () => {
+    const edits = { "300": "#e5b38c", "700": "#123456" };
+    const url = buildShareUrl("#672d3c", null, null, { edits });
+    expect(parseShareParams(new URL(url).search)?.edits).toEqual(edits);
+  });
+
+  it("ignora ediciones raras sin tirar el link", () => {
+    const shared = parseShareParams("?p=672d3c&e=300.zzzzzz_999.123456_500");
+    expect(shared?.baseColor).toBe("#672d3c");
+    expect(shared?.edits).toEqual({});
+  });
 });

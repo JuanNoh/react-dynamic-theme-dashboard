@@ -34,6 +34,8 @@ export interface ScaleOptions {
   mode?: ScaleMode;
 }
 
+export type ShadeEdits = Partial<Record<ShadeKey, string>>;
+
 // Contraste APCA promedio de las 21 familias de Tailwind v3 en cada tono: del 50
 // al 400 con texto negro encima, del 500 al 950 con texto blanco (calculado el
 // 30-oct-2026). El modo APCA lleva cada tono justo a ese contraste.
@@ -224,6 +226,31 @@ function toApca(scale: PaletteScale): PaletteScale {
     palette[key] = chroma.hsl(hue, saturation, (lighter + darker) / 2).hex();
   }
   return { ...scale, palette, baseShade };
+}
+
+// Retoques a mano encima de la escala del motor. El color de la marca se queda
+// fuera: si cambia, deja de ser el color del que sale todo lo demás.
+export function applyShadeEdits(
+  scale: PaletteScale,
+  edits: ShadeEdits,
+): Palette {
+  const palette = { ...scale.palette };
+  for (const key of SHADE_KEYS) {
+    const edit = edits[key];
+    if (edit && key !== scale.baseShade) palette[key] = edit;
+  }
+  return palette;
+}
+
+// Quita lo que no se puede aplicar: si el color de la marca cayó en un tono
+// editado (un link, o fijarlo ahí), ese retoque deja de contar
+export function cleanShadeEdits(
+  edits: ShadeEdits,
+  baseShade: ShadeKey,
+): ShadeEdits {
+  const clean = { ...edits };
+  delete clean[baseShade];
+  return clean;
 }
 
 export function generateLocalPalette(

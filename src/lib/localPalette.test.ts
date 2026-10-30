@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 import chroma from "chroma-js";
 import { APCAcontrast, sRGBtoY } from "apca-w3";
 import { SHADE_KEYS } from "@/types/palette";
-import { findBaseColor, generateLocalScale } from "./localPalette";
+import {
+  applyShadeEdits,
+  cleanShadeEdits,
+  findBaseColor,
+  generateLocalScale,
+} from "./localPalette";
 
 // Escalas sacadas de uicolors.app/generate/<hex> el 29-oct-2026: el motor tiene
 // que dar exactamente lo mismo tono por tono (50 → 950)
@@ -169,4 +174,38 @@ describe("modo APCA", () => {
       expect(isDescending(luminances(palette))).toBe(true);
     },
   );
+});
+
+describe("ediciones por tono", () => {
+  const scale = generateLocalScale("#0f8b8d");
+
+  it("cambia sólo el tono editado", () => {
+    const palette = applyShadeEdits(scale, { "300": "#123456" });
+    expect(palette["300"]).toBe("#123456");
+    for (const key of SHADE_KEYS) {
+      if (key !== "300") expect(palette[key]).toBe(scale.palette[key]);
+    }
+  });
+
+  it("no toca el color de la marca", () => {
+    const palette = applyShadeEdits(scale, { [scale.baseShade]: "#123456" });
+    expect(palette[scale.baseShade]).toBe("#0f8b8d");
+  });
+
+  it("sin ediciones la escala queda igual", () => {
+    expect(applyShadeEdits(scale, {})).toEqual(scale.palette);
+  });
+
+  it("quita el retoque que cayó en el color de la marca", () => {
+    const edits = { "300": "#123456", [scale.baseShade]: "#ffffff" };
+    expect(cleanShadeEdits(edits, scale.baseShade)).toEqual({
+      "300": "#123456",
+    });
+  });
+
+  it("no altera la escala original", () => {
+    const before = { ...scale.palette };
+    applyShadeEdits(scale, { "300": "#123456" });
+    expect(scale.palette).toEqual(before);
+  });
 });

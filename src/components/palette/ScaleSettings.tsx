@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { usePalette } from "@/context/usePalette";
 import type { ScaleMode } from "@/lib/localPalette";
 
@@ -16,10 +16,20 @@ const MODES: { value: ScaleMode; label: string; hint: string }[] = [
   },
 ];
 
+interface ScaleSettingsProps {
+  editing: boolean;
+  onToggleEditing: () => void;
+}
+
 // Cómo se arma la escala primaria: curva de Tailwind (con tono fijable) o
-// contraste APCA. Los dos modos son excluyentes.
-export default function ScaleSettings() {
-  const { scaleOptions, setScaleOptions } = usePalette();
+// contraste APCA, que son excluyentes, más los retoques a mano
+export default function ScaleSettings({
+  editing,
+  onToggleEditing,
+}: ScaleSettingsProps) {
+  const { scaleOptions, setScaleOptions, shadeEdits, setShadeEdits } =
+    usePalette();
+  const editedCount = Object.keys(shadeEdits).length;
   const mode = scaleOptions.mode ?? "tailwind";
   const pinnedShade = mode === "tailwind" ? scaleOptions.shade : null;
 
@@ -67,8 +77,38 @@ export default function ScaleSettings() {
         </button>
       )}
 
-      <p className="text-xs text-slate-500 dark:text-slate-400">
-        {MODES.find((item) => item.value === mode)?.hint}
+      <button
+        type="button"
+        onClick={onToggleEditing}
+        aria-pressed={editing}
+        className={`flex min-h-8 cursor-pointer items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition-colors ${
+          editing
+            ? "bg-ink text-ground"
+            : "bg-slate-100 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+        }`}
+      >
+        <Pencil className="h-3.5 w-3.5" />
+        Editar tonos
+      </button>
+
+      {editedCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShadeEdits({})}
+          aria-label="Restablecer todos los tonos editados"
+          className="flex cursor-pointer items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 dark:border-slate-700 dark:text-slate-300 dark:hover:border-slate-500"
+        >
+          {editedCount === 1
+            ? "1 tono editado"
+            : `${editedCount} tonos editados`}
+          <X className="h-3 w-3" />
+        </button>
+      )}
+
+      <p className="basis-full text-xs text-slate-500 dark:text-slate-400">
+        {editing
+          ? "Toca un tono para ajustarlo."
+          : MODES.find((item) => item.value === mode)?.hint}
       </p>
     </div>
   );

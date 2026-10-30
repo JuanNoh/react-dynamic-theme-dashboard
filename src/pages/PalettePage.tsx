@@ -2,8 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link2 } from "lucide-react";
 import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayoutTwo";
-import SwatchGrid from "@/components/palette/SwatchGrid";
-import ScaleSettings from "@/components/palette/ScaleSettings";
+import ScaleWorkbench from "@/components/palette/ScaleWorkbench";
 import ContrastSection from "@/components/palette/ContrastSection";
 import ExportSection from "@/components/palette/ExportSection";
 import HarmonySection from "@/components/palette/HarmonySection";
@@ -25,8 +24,10 @@ export default function PalettePage() {
     brandName,
     aiInsight,
     scaleOptions,
+    shadeEdits,
     setBaseColor,
     setScaleOptions,
+    setShadeEdits,
     setSecondaryPalette,
     setBrandName,
     setAiInsight,
@@ -43,6 +44,7 @@ export default function PalettePage() {
 
     setScaleOptions({ shade: shared.shade, mode: shared.mode });
     setBaseColor(shared.baseColor);
+    setShadeEdits(shared.edits);
     if (shared.secondaryColor) {
       setSecondaryPalette(generateLocalPalette(shared.secondaryColor));
     }
@@ -58,6 +60,7 @@ export default function PalettePage() {
   }, [
     setBaseColor,
     setScaleOptions,
+    setShadeEdits,
     setSecondaryPalette,
     setBrandName,
     setAiInsight,
@@ -70,7 +73,7 @@ export default function PalettePage() {
       baseColor,
       secondaryPalette ? findBaseColor(secondaryPalette) : null,
       brandName,
-      scaleOptions,
+      { ...scaleOptions, edits: shadeEdits },
     );
     try {
       await navigator.clipboard.writeText(url);
@@ -105,8 +108,7 @@ export default function PalettePage() {
 
         <Reveal className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <div className={aiInsight ? "lg:col-span-8" : "lg:col-span-12"}>
-            <ScaleSettings />
-            <SwatchGrid />
+            <ScaleWorkbench />
           </div>
           {aiInsight && (
             <div className="lg:col-span-4">
