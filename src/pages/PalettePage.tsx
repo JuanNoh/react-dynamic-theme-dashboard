@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
-import { Link2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Contrast, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayoutTwo";
 import SwatchGrid from "@/components/palette/SwatchGrid";
 import ScaleSettings from "@/components/palette/ScaleSettings";
+import ContrastMatrix from "@/components/palette/ContrastMatrix";
 import BrandForm from "@/components/palette/BrandFormTwo";
 import PopularPalettes from "@/components/palette/PopularPalettes";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
@@ -25,6 +26,7 @@ export default function PalettePage() {
     setBrandName,
     setAiInsight,
   } = usePalette();
+  const [matrixOpen, setMatrixOpen] = useState(false);
   const hydrated = useRef(false);
 
   // Si llegan con un link compartido (?p=...), cargamos esa paleta de entrada
@@ -103,6 +105,13 @@ export default function PalettePage() {
                   </h3>
                   <div className="flex items-center gap-2">
                     <button
+                      onClick={() => setMatrixOpen(true)}
+                      className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex cursor-pointer items-center gap-1.5 rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-500 transition-colors dark:border-slate-700 dark:bg-slate-800"
+                    >
+                      <Contrast className="h-3.5 w-3.5" />
+                      Contraste
+                    </button>
+                    <button
                       onClick={handleShare}
                       aria-label="Copiar link de esta paleta"
                       className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex cursor-pointer items-center gap-1.5 rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-500 transition-colors dark:border-slate-700 dark:bg-slate-800"
@@ -110,7 +119,7 @@ export default function PalettePage() {
                       <Link2 className="h-3.5 w-3.5" />
                       Compartir
                     </button>
-                    <span className="rounded border border-slate-200 bg-slate-100 px-2 py-1 font-mono text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-800">
+                    <span className="hidden rounded border border-slate-200 bg-slate-100 px-2 py-1 font-mono text-xs text-slate-500 sm:inline dark:border-slate-700 dark:bg-slate-800">
                       50-950
                     </span>
                   </div>
@@ -154,6 +163,11 @@ export default function PalettePage() {
           </div>
         </section>
       </div>
+
+      <ContrastMatrix
+        isOpen={matrixOpen}
+        onClose={() => setMatrixOpen(false)}
+      />
     </AppLayout>
   );
 }

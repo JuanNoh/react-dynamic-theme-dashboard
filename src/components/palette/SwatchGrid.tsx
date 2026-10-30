@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { useSwatchGrid } from "@/hooks/useSwatchGrid";
 import { usePalette } from "@/context/usePalette";
 import { type Palette, SHADE_KEYS } from "@/types/palette";
-import { getTintedText } from "@/lib/contrast";
+import { formatRatio, getTintedText } from "@/lib/contrast";
 import { Check, Copy, Pin } from "lucide-react";
 
 interface SwatchGridProps {
@@ -49,9 +49,12 @@ export default function SwatchGrid({ palette: propPalette }: SwatchGridProps) {
                 className={`absolute inset-0 rounded-2xl ring-1 ring-inset ${ringColorClass} pointer-events-none`}
               />
 
-              <div className="flex w-full items-start justify-between opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <div className="flex w-full flex-col items-start gap-0.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                 <span className="rounded-sm bg-black/10 px-1.5 font-mono text-[10px]">
                   {text.scoreAbs}Lc
+                </span>
+                <span className="rounded-sm bg-black/10 px-1.5 font-mono text-[10px]">
+                  {formatRatio(text.ratio)}:1
                 </span>
               </div>
 
