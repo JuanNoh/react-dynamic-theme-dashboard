@@ -6,6 +6,7 @@ import SwatchGrid from "@/components/palette/SwatchGrid";
 import ScaleSettings from "@/components/palette/ScaleSettings";
 import ContrastSection from "@/components/palette/ContrastSection";
 import ExportSection from "@/components/palette/ExportSection";
+import HarmonySection from "@/components/palette/HarmonySection";
 import FanStory from "@/components/story/FanStory";
 import Reveal from "@/components/ui/Reveal";
 import PopularPalettes from "@/components/palette/PopularPalettes";
@@ -114,6 +115,7 @@ export default function PalettePage() {
         </Reveal>
       </section>
 
+      <HarmonySection />
       <ContrastSection />
       <PopularPalettes />
 

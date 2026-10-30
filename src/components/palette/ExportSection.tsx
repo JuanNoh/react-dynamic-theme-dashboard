@@ -1,5 +1,6 @@
 import { Check, Copy } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
+import { pillClass } from "@/components/ui/pillClass";
 import { usePalette } from "@/context/usePalette";
 import { useExportModal, type ColorFormat } from "@/hooks/useExportModal";
 import { actionShade } from "@/lib/contrast";
@@ -12,11 +13,6 @@ const TABS = [
 ] as const;
 
 const FORMATS: ColorFormat[] = ["hex", "oklch", "hsl", "rgb"];
-
-const pillClass = (active: boolean) =>
-  `min-h-11 cursor-pointer rounded-full px-4 text-sm font-medium transition-colors ${
-    active ? "bg-ink text-ground" : "text-soft hover:text-ink"
-  }`;
 
 export default function ExportSection() {
   const { palette } = usePalette();
