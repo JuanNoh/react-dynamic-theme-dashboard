@@ -20,6 +20,9 @@ export interface PaletteCtx {
   scaleOptions: ScaleOptions;
   setScaleOptions: (patch: ScaleOptions) => void;
 
+  includeStatus: boolean; // sumar los colores de estado a la exportación
+  setIncludeStatus: (include: boolean) => void;
+
   brandName: string;
   setBrandName: (name: string) => void;
 

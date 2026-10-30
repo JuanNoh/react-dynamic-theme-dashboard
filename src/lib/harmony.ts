@@ -54,7 +54,7 @@ const MAX_LIGHTNESS = 0.8;
 
 // Si el color se sale de lo que una pantalla muestra, se le baja la intensidad
 // hasta que quepa, sin mover su tono ni su claridad
-function fitToScreen(lightness: number, intensity: number, hue: number) {
+export function fitToScreen(lightness: number, intensity: number, hue: number) {
   let low = 0;
   let high = intensity;
   if (!chroma.oklch(lightness, high, hue).clipped()) {

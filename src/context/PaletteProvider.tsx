@@ -30,6 +30,7 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
   const [secondaryPalette, setSecondaryPalette] = useState<Palette | null>(
     null,
   );
+  const [includeStatus, setIncludeStatus] = useState(false);
   const [brandName, setBrandName] = useState("My Brand");
   const [aiInsight, setAiInsight] = useState<AIInsight | null>(null);
   const [landingCopy, setLandingCopy] = useState<LandingCopy | null>(null);
@@ -114,6 +115,8 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       baseShade,
       scaleOptions,
       setScaleOptions,
+      includeStatus,
+      setIncludeStatus,
       brandName,
       setBrandName,
       aiInsight,
@@ -132,6 +135,7 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       baseShade,
       scaleOptions,
       setScaleOptions,
+      includeStatus,
       brandName,
       aiInsight,
       landingCopy,

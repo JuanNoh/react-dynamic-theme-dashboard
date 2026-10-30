@@ -1,17 +1,39 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { usePalette } from "@/context/usePalette";
+import { statusScales } from "@/lib/statusColors";
+import type { Palette } from "@/types/palette";
 import chroma from "chroma-js";
 
 type Tab = "css" | "tailwind-v3" | "tailwind-v4" | "json";
 export type ColorFormat = "hex" | "oklch" | "hsl" | "rgb";
 
+interface ExtraScale {
+  id: string;
+  label: string;
+  palette: Palette;
+}
+
 export function useExportModal(initialTab: Tab = "tailwind-v4") {
-  const { palette, secondaryPalette, baseColor } = usePalette();
+  const { palette, secondaryPalette, baseColor, includeStatus } = usePalette();
 
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [format, setFormat] = useState<ColorFormat>("hex");
   const [copied, setCopied] = useState(false);
+
+  // Todo lo que acompaña al primario, en el orden en que se exporta
+  const extraScales: ExtraScale[] = [
+    ...(secondaryPalette
+      ? [
+          {
+            id: "secondary",
+            label: "Secondary Palette",
+            palette: secondaryPalette,
+          },
+        ]
+      : []),
+    ...(includeStatus ? statusScales(baseColor) : []),
+  ];
 
   const formatColor = (color: string) => {
     switch (format) {
@@ -32,98 +54,80 @@ export function useExportModal(initialTab: Tab = "tailwind-v4") {
     }
   };
 
+  const cssVariables = (id: string, scale: Palette) =>
+    Object.entries(scale)
+      .map(([key, value]) => `  --color-${id}-${key}: ${formatColor(value)};`)
+      .join("\n");
+
+  const configEntries = (scale: Palette) =>
+    Object.entries(scale)
+      .map(([key, value]) => `          ${key}: '${formatColor(value)}',`)
+      .join("\n");
+
   const getCssContent = () => {
-    let css = `:root {
+    const extras = extraScales
+      .map(
+        (scale) =>
+          `\n\n  /* ${scale.label} */\n${cssVariables(scale.id, scale.palette)}`,
+      )
+      .join("");
+
+    return `:root {
   /* Color Base: ${baseColor} */
-${Object.entries(palette)
-  .map(([key, value]) => `  --color-primary-${key}: ${formatColor(value)};`)
-  .join("\n")}`;
-
-    if (secondaryPalette) {
-      css += `\n\n  /* Secondary Palette */
-${Object.entries(secondaryPalette)
-  .map(([key, value]) => `  --color-secondary-${key}: ${formatColor(value)};`)
-  .join("\n")}`;
-    }
-
-    css += "\n}";
-    return css;
+${cssVariables("primary", palette)}${extras}
+}`;
   };
 
   const getTailwindV3Content = () => {
-    let content = `// tailwind.config.js
+    const extras = extraScales
+      .map(
+        (scale) => `
+        ${scale.id}: {
+${configEntries(scale.palette)}
+        },`,
+      )
+      .join("");
+
+    return `// tailwind.config.js
 module.exports = {
   theme: {
     extend: {
       colors: {
         primary: {
-${Object.entries(palette)
-  .map(([key, value]) => `          ${key}: '${formatColor(value)}',`)
-  .join("\n")}
-        },`;
-
-    if (secondaryPalette) {
-      content += `
-        secondary: {
-${Object.entries(secondaryPalette)
-  .map(([key, value]) => `          ${key}: '${formatColor(value)}',`)
-  .join("\n")}
-        },`;
-    }
-
-    content += `
+${configEntries(palette)}
+        },${extras}
       },
     },
   },
 };`;
-    return content;
   };
 
   const getTailwindV4Content = () => {
-    let content = `@theme {
-${Object.entries(palette)
-  .map(([key, value]) => `  --color-primary-${key}: ${formatColor(value)};`)
-  .join("\n")}`;
+    const extras = extraScales
+      .map((scale) => `\n\n${cssVariables(scale.id, scale.palette)}`)
+      .join("");
 
-    if (secondaryPalette) {
-      content += `\n
-${Object.entries(secondaryPalette)
-  .map(([key, value]) => `  --color-secondary-${key}: ${formatColor(value)};`)
-  .join("\n")}`;
-    }
-
-    content += "\n}";
-    return content;
+    return `@theme {
+${cssVariables("primary", palette)}${extras}
+}`;
   };
 
   const getJsonContent = () => {
-    const formattedPalette = Object.entries(palette).reduce(
-      (acc, [key, value]) => {
-        acc[key] = formatColor(value);
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
-
-    const result: {
-      primary: Record<string, string>;
-      secondary?: Record<string, string>;
-    } = {
-      primary: formattedPalette,
-    };
-
-    if (secondaryPalette) {
-      const formattedSecondary = Object.entries(secondaryPalette).reduce(
-        (acc, [key, value]) => {
-          acc[key] = formatColor(value);
-          return acc;
-        },
-        {} as Record<string, string>,
+    const formatScale = (scale: Palette) =>
+      Object.fromEntries(
+        Object.entries(scale).map(([key, value]) => [key, formatColor(value)]),
       );
-      result.secondary = formattedSecondary;
-    }
 
-    return JSON.stringify(result, null, 2);
+    return JSON.stringify(
+      {
+        primary: formatScale(palette),
+        ...Object.fromEntries(
+          extraScales.map((scale) => [scale.id, formatScale(scale.palette)]),
+        ),
+      },
+      null,
+      2,
+    );
   };
 
   const getContent = () => {

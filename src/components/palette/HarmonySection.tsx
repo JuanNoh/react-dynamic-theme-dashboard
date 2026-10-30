@@ -1,25 +1,11 @@
 import { useMemo, useState } from "react";
 import { Check } from "lucide-react";
+import ScaleBar from "@/components/palette/ScaleBar";
 import Reveal from "@/components/ui/Reveal";
 import { pillClass } from "@/components/ui/pillClass";
 import { usePalette } from "@/context/usePalette";
 import { HARMONIES, harmonyColors } from "@/lib/harmony";
 import { findBaseColor, generateLocalPalette } from "@/lib/localPalette";
-import { type Palette, SHADE_KEYS } from "@/types/palette";
-
-function ScaleBar({ palette }: { palette: Palette }) {
-  return (
-    <span aria-hidden="true" className="flex h-14 overflow-hidden rounded-xl">
-      {SHADE_KEYS.map((key) => (
-        <span
-          key={key}
-          className="flex-1 transition-colors duration-500"
-          style={{ backgroundColor: palette[key] }}
-        />
-      ))}
-    </span>
-  );
-}
 
 // El secundario a mano: hasta ahora sólo lo escogía la IA
 export default function HarmonySection() {

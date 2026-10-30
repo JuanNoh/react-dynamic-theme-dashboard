@@ -7,6 +7,7 @@ import ScaleSettings from "@/components/palette/ScaleSettings";
 import ContrastSection from "@/components/palette/ContrastSection";
 import ExportSection from "@/components/palette/ExportSection";
 import HarmonySection from "@/components/palette/HarmonySection";
+import StatusSection from "@/components/palette/StatusSection";
 import FanStory from "@/components/story/FanStory";
 import Reveal from "@/components/ui/Reveal";
 import PopularPalettes from "@/components/palette/PopularPalettes";
@@ -116,6 +117,7 @@ export default function PalettePage() {
       </section>
 
       <HarmonySection />
+      <StatusSection />
       <ContrastSection />
       <PopularPalettes />
 
