@@ -55,7 +55,8 @@ export default function PopularPalettes() {
         </h2>
       </Reveal>
 
-      <Reveal className="grid grid-cols-[repeat(auto-fill,minmax(min(150px,100%),1fr))] gap-3">
+      {/* Seis por fila desde lg: con auto-fill eran 7 + 5 y la fila de abajo quedaba coja */}
+      <Reveal className="grid grid-cols-[repeat(auto-fill,minmax(min(150px,100%),1fr))] gap-3 lg:grid-cols-6">
         {items.map((item) => (
           <button
             key={item.id}
@@ -63,7 +64,7 @@ export default function PopularPalettes() {
             onClick={() => applyPalette(item)}
             aria-pressed={activeId === item.id}
             aria-label={`Usar paleta ${item.name}`}
-            className={`tarjeta bg-raised relative h-60 cursor-pointer overflow-hidden rounded-[18px] text-left ${
+            className={`tarjeta bg-raised relative h-64 cursor-pointer overflow-hidden rounded-[18px] text-left ${
               activeId === item.id ? "ring-ink ring-2" : "ring-edge ring-1"
             }`}
           >
@@ -82,9 +83,12 @@ export default function PopularPalettes() {
                 />
               ))}
             </span>
-            <span className="absolute inset-x-4 bottom-3.5 flex flex-col">
+            {/* Anclado arriba: las vibras de dos renglones no mueven el nombre */}
+            <span className="absolute inset-x-4 top-[182px] flex flex-col">
               <span className="text-[17px] font-semibold">{item.name}</span>
-              <span className="text-soft truncate text-xs">{item.vibe}</span>
+              <span className="text-soft text-xs leading-snug">
+                {item.vibe}
+              </span>
             </span>
           </button>
         ))}
