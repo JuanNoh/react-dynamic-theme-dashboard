@@ -1,10 +1,12 @@
 import { createContext } from "react";
 import type {
   Palette,
+  ShadeKey,
   AIInsight,
   LandingCopy,
   HistoryItem,
 } from "@/types/palette";
+import type { ScaleOptions } from "@/lib/localPalette";
 
 export interface PaletteCtx {
   baseColor: string;
@@ -13,6 +15,10 @@ export interface PaletteCtx {
   setBaseColor: (color: string) => void;
   setPalette: (palette: Palette) => void;
   setSecondaryPalette: (palette: Palette) => void;
+
+  baseShade: ShadeKey | null; // tono donde quedó el color base
+  scaleOptions: ScaleOptions;
+  setScaleOptions: (patch: ScaleOptions) => void;
 
   brandName: string;
   setBrandName: (name: string) => void;

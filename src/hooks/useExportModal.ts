@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { usePalette } from "@/context/usePalette";
-import type { ToastType } from "@/components/ui/Toast";
 import chroma from "chroma-js";
 
 type Tab = "css" | "tailwind-v3" | "tailwind-v4" | "json";
@@ -12,10 +12,6 @@ export function useExportModal(initialTab: Tab = "tailwind-v4") {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [format, setFormat] = useState<ColorFormat>("hex");
   const [copied, setCopied] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    type: ToastType;
-  } | null>(null);
 
   const formatColor = (color: string) => {
     switch (format) {
@@ -143,11 +139,15 @@ ${Object.entries(secondaryPalette)
     }
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(getContent());
-    setCopied(true);
-    setToast({ message: "¡Código copiado!", type: "success" });
-    setTimeout(() => setCopied(false), 2000);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(getContent());
+      setCopied(true);
+      toast.success("¡Código copiado!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("No se pudo copiar el código, inténtalo de nuevo.");
+    }
   };
 
   return {
@@ -155,8 +155,6 @@ ${Object.entries(secondaryPalette)
     setActiveTab,
     format,
     setFormat,
-    toast,
-    setToast,
     copied,
     getContent,
     copyToClipboard,

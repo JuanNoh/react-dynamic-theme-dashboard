@@ -1,23 +1,32 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
   useCallback,
   type ReactNode,
 } from "react";
 import { DEFAULT_PALETTE } from "@/constants/defaults";
 import { applyPalettesToRoot } from "@/lib/themeVars";
-import { generateLocalPalette } from "@/lib/localPalette";
+import { generateLocalPalette, type ScaleOptions } from "@/lib/localPalette";
 import { PaletteContext, type PaletteCtx } from "@/context/PaletteContext";
-import type {
-  AIInsight,
-  LandingCopy,
-  HistoryItem,
-  Palette,
+import {
+  SHADE_KEYS,
+  type AIInsight,
+  type LandingCopy,
+  type HistoryItem,
+  type Palette,
 } from "@/types/palette";
 
 export function PaletteProvider({ children }: { children: ReactNode }) {
   const [baseColor, setBaseColor] = useState(DEFAULT_PALETTE["500"]);
+  const [scaleOptions, setScaleOptionsState] = useState<ScaleOptions>({
+    shade: null,
+    mode: "tailwind",
+  });
+  // Espejos para regenerar desde callbacks estables sin depender del render
+  const baseColorRef = useRef(baseColor);
+  const scaleOptionsRef = useRef(scaleOptions);
   const [secondaryPalette, setSecondaryPalette] = useState<Palette | null>(
     null,
   );
@@ -43,11 +52,25 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
   }, [palette, secondaryPalette]);
 
   const updateBaseColor = useCallback((color: string) => {
+    baseColorRef.current = color;
     setBaseColor(color);
-    // Regeneramos la escala en local para que el picker manual sí se sienta vivo;
-    // cuando la paleta viene de la IA o del historial, su setPalette pisa esta en el mismo tick
-    setPalette(generateLocalPalette(color));
+    // La escala siempre sale del motor local con los ajustes vigentes (tono
+    // fijado, modo APCA); sólo el historial la pisa con su foto guardada
+    setPalette(generateLocalPalette(color, scaleOptionsRef.current));
   }, []);
+
+  const setScaleOptions = useCallback((patch: ScaleOptions) => {
+    const next = { ...scaleOptionsRef.current, ...patch };
+    scaleOptionsRef.current = next;
+    setScaleOptionsState(next);
+    setPalette(generateLocalPalette(baseColorRef.current, next));
+  }, []);
+
+  const baseShade = useMemo(
+    () =>
+      SHADE_KEYS.find((k) => palette[k] === baseColor.toLowerCase()) ?? null,
+    [palette, baseColor],
+  );
 
   useEffect(() => {
     try {
@@ -86,6 +109,9 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       setBaseColor: updateBaseColor,
       setPalette,
       setSecondaryPalette,
+      baseShade,
+      scaleOptions,
+      setScaleOptions,
       brandName,
       setBrandName,
       aiInsight,
@@ -101,6 +127,9 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
       palette,
       secondaryPalette,
       updateBaseColor,
+      baseShade,
+      scaleOptions,
+      setScaleOptions,
       brandName,
       aiInsight,
       landingCopy,

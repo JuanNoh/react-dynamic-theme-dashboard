@@ -14,7 +14,6 @@ const PREVIEW_SHADES: ShadeKey[] = ["100", "300", "500", "700", "900"];
 export default function PopularPalettes() {
   const {
     setBaseColor,
-    setPalette,
     setSecondaryPalette,
     setBrandName,
     setAiInsight,
@@ -35,12 +34,12 @@ export default function PopularPalettes() {
   const applyPalette = (item: PopularPalette) => {
     setActiveId(item.id);
     setBaseColor(item.baseColor);
-    setPalette(generateLocalPalette(item.baseColor));
     setSecondaryPalette(generateLocalPalette(item.secondaryColor));
     setBrandName(item.name);
     setAiInsight({
       name: item.name,
-      description: "Paleta curada de la galería de populares, lista para usarse o como punto de partida para pedirle una variante a la IA.",
+      description:
+        "Paleta curada de la galería de populares, lista para usarse o como punto de partida para pedirle una variante a la IA.",
       sentiment: item.vibe,
       usageTip:
         "Usa el primario para acciones y navegación; reserva el secundario para acentos puntuales.",
@@ -66,7 +65,7 @@ export default function PopularPalettes() {
             className={`group min-w-44 shrink-0 cursor-pointer snap-start rounded-2xl border bg-white/60 p-4 text-left shadow-sm backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-md dark:bg-slate-900/60 ${
               activeId === item.id
                 ? "border-primary-500 ring-primary-500/30 ring-2"
-                : "border-white/20 hover:border-primary-400 dark:border-white/10"
+                : "hover:border-primary-400 border-white/20 dark:border-white/10"
             }`}
           >
             <div className="mb-3 flex h-8 gap-1 overflow-hidden rounded-lg">

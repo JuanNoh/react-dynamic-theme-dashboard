@@ -1,5 +1,15 @@
+import { motion } from "motion/react";
 import { useBrandForm } from "@/hooks/useBrandForm";
+import ColorPicker from "@/components/palette/ColorPicker";
+import ScaleStrip from "@/components/palette/ScaleStrip";
 import { Loader2, ArrowRight, AlertCircle } from "lucide-react";
+
+// Entrada suave del hero: sube poquito y aparece, primero el texto y luego el buscador
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, delay, ease: "easeOut" as const },
+});
 
 export default function BrandForm() {
   const {
@@ -10,37 +20,50 @@ export default function BrandForm() {
     setError,
     handleSubmit,
     hasKeywords,
+    isHexTyped,
+    baseColor,
+    pickColor,
   } = useBrandForm();
 
   return (
     <div className="relative mx-auto w-full max-w-4xl px-4">
-      <div className="mb-12 space-y-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-[11px] font-bold tracking-widest text-slate-600 uppercase shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-500 dark:bg-slate-200"></span>
-          </span>
-          Soporta Tailwind v4
-        </div>
+      <motion.div {...fadeUp(0)} className="mb-12 space-y-6 text-center">
+        <p className="inline-flex rounded-full border border-slate-200 bg-white/60 px-3.5 py-1 text-xs font-medium text-slate-600 backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+          Gratis y sin cuenta
+        </p>
 
-        <h1 className="text-5xl font-extrabold tracking-tight text-balance text-slate-900 drop-shadow-sm sm:text-6xl md:text-7xl dark:text-white">
-          Generador de{" "}
-          <span className="bg-gradient-to-b from-slate-700 to-black bg-clip-text text-transparent dark:from-white dark:via-slate-200 dark:to-slate-500">
-            Paletas
-          </span>
+        <h1 className="text-5xl font-extrabold tracking-tight text-balance text-slate-900 sm:text-6xl md:text-7xl dark:text-white">
+          Paletas de{" "}
+          <span className="text-primary-600 dark:text-primary-400">
+            color
+          </span>{" "}
+          listas para tu producto
         </h1>
 
         <p className="mx-auto max-w-2xl text-lg leading-relaxed text-balance text-slate-600 md:text-xl dark:text-slate-400">
-          Crea esquemas de color profesionales (OKLCH, HEX) optimizados para UI
-          moderna con un solo prompt.
+          Describe tu marca y la IA elige los colores, o escoge uno tú. Te damos
+          la escala completa, con buen contraste y lista para exportar.
         </p>
-      </div>
+      </motion.div>
 
-      <form onSubmit={handleSubmit} className="relative z-10 mx-auto max-w-3xl">
+      <motion.form
+        {...fadeUp(0.1)}
+        onSubmit={handleSubmit}
+        className="relative z-10 mx-auto max-w-3xl"
+      >
         <div className="group relative">
           <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-slate-200 via-white to-slate-200 opacity-20 blur-lg transition duration-1000 group-hover:opacity-40 group-hover:duration-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"></div>
 
           <div className="relative flex items-center">
+            {/* Escoger el color a mano, sin pasar por la IA */}
+            <div className="absolute top-1/2 left-3 z-20 -translate-y-1/2">
+              <ColorPicker
+                value={baseColor}
+                onChange={pickColor}
+                disabled={loading}
+              />
+            </div>
+
             <input
               type="text"
               value={keywords}
@@ -48,8 +71,8 @@ export default function BrandForm() {
                 setKeywords(e.target.value);
                 if (error) setError(null);
               }}
-              placeholder="Describe tu marca..."
-              className="w-full rounded-2xl border border-slate-200 bg-white/80 py-5 pr-16 pl-6 text-lg text-slate-900 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-500/20 focus:outline-none sm:pr-40 dark:border-white/10 dark:bg-[#0B1120]/90 dark:text-white dark:shadow-black/50 dark:placeholder:text-slate-500 dark:focus:border-white/30 dark:focus:ring-white/20"
+              placeholder="Describe tu marca o pega un #hex..."
+              className="w-full rounded-2xl border border-slate-200 bg-white/80 py-5 pr-16 pl-16 text-lg text-slate-900 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-500/20 focus:outline-none sm:pr-40 dark:border-white/10 dark:bg-[#0B1120]/90 dark:text-white dark:shadow-black/50 dark:placeholder:text-slate-500 dark:focus:border-white/30 dark:focus:ring-white/20"
               disabled={loading}
             />
 
@@ -62,7 +85,9 @@ export default function BrandForm() {
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <>
-                  <span className="hidden sm:inline">Generar</span>
+                  <span className="hidden sm:inline">
+                    {isHexTyped ? "Usar color" : "Generar"}
+                  </span>
                   <ArrowRight
                     className="h-5 w-5 sm:h-4 sm:w-4"
                     strokeWidth={2.5}
@@ -73,6 +98,8 @@ export default function BrandForm() {
           </div>
         </div>
 
+        <ScaleStrip />
+
         <div className="mt-6">
           {!error && (
             <div className="flex flex-wrap justify-center gap-2 md:justify-start">
@@ -80,9 +107,12 @@ export default function BrandForm() {
                 Pruébalo:
               </span>
               {[
-                { label: "🌱 Eco-Friendly", val: "Eco Friendly Plant Shop" },
-                { label: "🚀 SaaS", val: "SaaS Startup AI" }, // Texto acortado
-                { label: "🍣 Sushi", val: "Sushi Restaurant Premium" }, // Texto acortado visualmente
+                { label: "🌱 Eco", val: "Tienda de plantas ecológica" },
+                {
+                  label: "🚀 SaaS",
+                  val: "Startup SaaS de inteligencia artificial",
+                },
+                { label: "🍣 Sushi", val: "Restaurante de sushi premium" },
               ].map((item) => (
                 <button
                   key={item.label}
@@ -102,7 +132,7 @@ export default function BrandForm() {
             </div>
           )}
         </div>
-      </form>
+      </motion.form>
     </div>
   );
 }

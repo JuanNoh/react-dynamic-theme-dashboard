@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link2 } from "lucide-react";
+import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayoutTwo";
 import SwatchGrid from "@/components/palette/SwatchGrid";
+import ScaleSettings from "@/components/palette/ScaleSettings";
 import BrandForm from "@/components/palette/BrandFormTwo";
 import PopularPalettes from "@/components/palette/PopularPalettes";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import DashboardPreview from "@/components/preview/DashboardPreview";
 import MobilePreview from "@/components/preview/MobilePreview";
-import Toast from "@/components/ui/Toast";
 import { usePalette } from "@/context/usePalette";
-import { generateLocalPalette } from "@/lib/localPalette";
+import { findBaseColor, generateLocalPalette } from "@/lib/localPalette";
 import { buildShareUrl, parseShareParams } from "@/lib/shareUrl";
 
 export default function PalettePage() {
@@ -17,13 +18,13 @@ export default function PalettePage() {
     baseColor,
     secondaryPalette,
     brandName,
+    scaleOptions,
     setBaseColor,
-    setPalette,
+    setScaleOptions,
     setSecondaryPalette,
     setBrandName,
     setAiInsight,
   } = usePalette();
-  const [toast, setToast] = useState<string | null>(null);
   const hydrated = useRef(false);
 
   // Si llegan con un link compartido (?p=...), cargamos esa paleta de entrada
@@ -34,34 +35,42 @@ export default function PalettePage() {
     const shared = parseShareParams(window.location.search);
     if (!shared) return;
 
+    setScaleOptions({ shade: shared.shade, mode: shared.mode });
     setBaseColor(shared.baseColor);
-    setPalette(generateLocalPalette(shared.baseColor));
     if (shared.secondaryColor) {
       setSecondaryPalette(generateLocalPalette(shared.secondaryColor));
     }
     if (shared.name) setBrandName(shared.name);
     setAiInsight({
       name: shared.name ?? "Paleta compartida",
-      description: "Cargada desde un link compartido, lista para explorar o exportar.",
+      description:
+        "Cargada desde un link compartido, lista para explorar o exportar.",
       sentiment: "Compartida, Lista, Editable",
       usageTip:
         "Puedes ajustar el color base o describir tu marca para pedirle una variante a la IA.",
     });
   }, [
     setBaseColor,
-    setPalette,
+    setScaleOptions,
     setSecondaryPalette,
     setBrandName,
     setAiInsight,
   ]);
 
   const handleShare = async () => {
-    const url = buildShareUrl(baseColor, secondaryPalette?.["500"], brandName);
+    // El secundario no siempre tiene su base en el 500: lo sacamos de la escala
+    // para que quien abra el link vea exactamente la misma paleta
+    const url = buildShareUrl(
+      baseColor,
+      secondaryPalette ? findBaseColor(secondaryPalette) : null,
+      brandName,
+      scaleOptions,
+    );
     try {
       await navigator.clipboard.writeText(url);
-      setToast("¡Link copiado! Compártelo donde quieras.");
+      toast.success("¡Link copiado! Compártelo donde quieras.");
     } catch {
-      setToast("No se pudo copiar el link, inténtalo de nuevo.");
+      toast.error("No se pudo copiar el link, inténtalo de nuevo.");
     }
   };
 
@@ -74,13 +83,14 @@ export default function PalettePage() {
 
         <PopularPalettes />
 
-        <section className="mx-auto mb-20 max-w-7xl">
+        <section id="sistema" className="mx-auto mb-20 max-w-7xl scroll-mt-28">
           <div className="mb-10 px-2 text-center">
             <h2 className="mb-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
               Tu Sistema de Color
             </h2>
             <p className="mx-auto max-w-xl text-balance text-slate-500 dark:text-slate-400">
-              Generado con inteligencia artificial y optimizado para UI.
+              Copia cualquier tono, fija tu color donde quieras y expórtalo a tu
+              proyecto.
             </p>
           </div>
 
@@ -105,6 +115,8 @@ export default function PalettePage() {
                     </span>
                   </div>
                 </div>
+
+                <ScaleSettings />
 
                 <div className="w-full">
                   <SwatchGrid />
@@ -142,14 +154,6 @@ export default function PalettePage() {
           </div>
         </section>
       </div>
-
-      {toast && (
-        <Toast
-          message={toast}
-          type="success"
-          onClose={() => setToast(null)}
-        />
-      )}
     </AppLayout>
   );
 }

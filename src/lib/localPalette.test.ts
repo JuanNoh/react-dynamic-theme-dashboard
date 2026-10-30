@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
+import chroma from "chroma-js";
+import { APCAcontrast, sRGBtoY } from "apca-w3";
 import { SHADE_KEYS } from "@/types/palette";
-import { generateLocalScale } from "./localPalette";
+import { findBaseColor, generateLocalScale } from "./localPalette";
 
 // Escalas sacadas de uicolors.app/generate/<hex> el 29-oct-2026: el motor tiene
 // que dar exactamente lo mismo tono por tono (50 → 950)
@@ -91,4 +93,80 @@ describe("generateLocalScale", () => {
         expect(palette[key]).toMatch(/^#[0-9a-f]{6}$/);
     }
   });
+});
+
+describe("findBaseColor", () => {
+  it.each(["#0f8b8d", "#ff6b00", "#672d3c", "#b5651d", "#3b82f6"])(
+    "recupera %s aunque no esté en el 500",
+    (hex) => {
+      expect(findBaseColor(generateLocalScale(hex).palette)).toBe(hex);
+    },
+  );
+
+  it("si la escala no es del motor, regresa el 500", () => {
+    const palette = generateLocalScale("#0f8b8d").palette;
+    const tweaked = { ...palette, "300": "#123456" };
+    expect(findBaseColor(tweaked)).toBe(tweaked["500"]);
+  });
+});
+
+// La escala siempre tiene que ir de más a menos brillo, sin brincos
+const luminances = (palette: Record<string, string>) =>
+  SHADE_KEYS.map((k) => chroma(palette[k]).luminance());
+const isDescending = (values: number[]) =>
+  values.every((v, i) => i === 0 || v < values[i - 1]);
+
+const lcOn = (text: "black" | "white", hex: string) => {
+  const textY = sRGBtoY(text === "black" ? [0, 0, 0] : [255, 255, 255]);
+  return Math.abs(Number(APCAcontrast(textY, sRGBtoY(chroma(hex).rgb()))));
+};
+
+describe("fijar el color en un tono", () => {
+  it.each([
+    ["#672d3c", "500"],
+    ["#0f8b8d", "500"],
+    ["#fde68a", "400"],
+    ["#1e293b", "700"],
+  ] as const)("%s queda intacto en el %s", (hex, shade) => {
+    const { palette, baseShade } = generateLocalScale(hex, { shade });
+    expect(baseShade).toBe(shade);
+    expect(palette[shade]).toBe(hex);
+    expect(isDescending(luminances(palette))).toBe(true);
+  });
+
+  it("fijarlo donde cae solo da la misma escala de siempre", () => {
+    const natural = generateLocalScale("#0f8b8d");
+    const pinned = generateLocalScale("#0f8b8d", { shade: natural.baseShade });
+    expect(pinned.palette).toEqual(natural.palette);
+  });
+});
+
+describe("modo APCA", () => {
+  const TARGETS: Record<string, ["black" | "white", number]> = {
+    "50": ["black", 102],
+    "100": ["black", 97],
+    "200": ["black", 88],
+    "300": ["black", 77],
+    "400": ["black", 61],
+    "500": ["white", 63],
+    "600": ["white", 76],
+    "700": ["white", 86],
+    "800": ["white", 94],
+    "900": ["white", 98],
+    "950": ["white", 105],
+  };
+
+  it.each(["#0f8b8d", "#672d3c", "#ff6b00", "#808080"])(
+    "%s: cada tono llega a su contraste y la marca no se toca",
+    (hex) => {
+      const { palette, baseShade } = generateLocalScale(hex, { mode: "apca" });
+      expect(palette[baseShade]).toBe(hex);
+      for (const key of SHADE_KEYS) {
+        if (key === baseShade) continue;
+        const [text, lc] = TARGETS[key];
+        expect(Math.abs(lcOn(text, palette[key]) - lc)).toBeLessThan(1.5);
+      }
+      expect(isDescending(luminances(palette))).toBe(true);
+    },
+  );
 });

@@ -1,5 +1,4 @@
 import { useExportModal, type ColorFormat } from "@/hooks/useExportModal";
-import Toast from "../ui/Toast";
 import { X, Copy, Check, FileCode, Hash } from "lucide-react";
 
 interface ExportModalProps {
@@ -13,8 +12,6 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
     setActiveTab,
     format,
     setFormat,
-    toast,
-    setToast,
     copied,
     getContent,
     copyToClipboard,
@@ -126,14 +123,6 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
           </button>
         </div>
       </div>
-
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 }
