@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { Contrast, Link2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Link2 } from "lucide-react";
 import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayoutTwo";
 import SwatchGrid from "@/components/palette/SwatchGrid";
 import ScaleSettings from "@/components/palette/ScaleSettings";
-import ContrastMatrix from "@/components/palette/ContrastMatrix";
-import BrandForm from "@/components/palette/BrandFormTwo";
+import ContrastSection from "@/components/palette/ContrastSection";
+import ExportSection from "@/components/palette/ExportSection";
+import FanStory from "@/components/story/FanStory";
+import Reveal from "@/components/ui/Reveal";
 import PopularPalettes from "@/components/palette/PopularPalettes";
 import AIInsightCard from "@/components/dashboard/AIInsightCard";
 import DashboardPreview from "@/components/preview/DashboardPreview";
@@ -19,6 +21,7 @@ export default function PalettePage() {
     baseColor,
     secondaryPalette,
     brandName,
+    aiInsight,
     scaleOptions,
     setBaseColor,
     setScaleOptions,
@@ -26,7 +29,6 @@ export default function PalettePage() {
     setBrandName,
     setAiInsight,
   } = usePalette();
-  const [matrixOpen, setMatrixOpen] = useState(false);
   const hydrated = useRef(false);
 
   // Si llegan con un link compartido (?p=...), cargamos esa paleta de entrada
@@ -78,96 +80,58 @@ export default function PalettePage() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen px-4 pt-28 pb-24">
-        <section className="relative z-10 mx-auto mb-16 max-w-4xl">
-          <BrandForm />
-        </section>
+      <FanStory />
 
-        <PopularPalettes />
+      <section
+        id="sistema"
+        className="mx-auto flex max-w-[1280px] scroll-mt-28 flex-col gap-8 px-6 pt-24 pb-12"
+      >
+        <Reveal className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-[clamp(2.2rem,5vw,4.2rem)] leading-none font-bold tracking-[-0.03em]">
+            Ajusta tu escala.
+          </h2>
+          <button
+            type="button"
+            onClick={handleShare}
+            aria-label="Copiar link de esta paleta"
+            className="bg-raised text-ink ring-edge flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-5 text-sm font-semibold ring-1 transition-transform hover:-translate-y-0.5"
+          >
+            <Link2 className="h-4 w-4" />
+            Compartir
+          </button>
+        </Reveal>
 
-        <section id="sistema" className="mx-auto mb-20 max-w-7xl scroll-mt-28">
-          <div className="mb-10 px-2 text-center">
-            <h2 className="mb-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Tu Sistema de Color
-            </h2>
-            <p className="mx-auto max-w-xl text-balance text-slate-500 dark:text-slate-400">
-              Copia cualquier tono, fija tu color donde quieras y expórtalo a tu
-              proyecto.
-            </p>
+        <Reveal className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <div className={aiInsight ? "lg:col-span-8" : "lg:col-span-12"}>
+            <ScaleSettings />
+            <SwatchGrid />
           </div>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="space-y-6 lg:col-span-8">
-              <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/60 p-6 shadow-xl shadow-slate-200/50 backdrop-blur-2xl sm:p-8 dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/20">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase dark:text-slate-400">
-                    Escala Primaria
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setMatrixOpen(true)}
-                      className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex cursor-pointer items-center gap-1.5 rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-500 transition-colors dark:border-slate-700 dark:bg-slate-800"
-                    >
-                      <Contrast className="h-3.5 w-3.5" />
-                      Contraste
-                    </button>
-                    <button
-                      onClick={handleShare}
-                      aria-label="Copiar link de esta paleta"
-                      className="hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex cursor-pointer items-center gap-1.5 rounded border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-500 transition-colors dark:border-slate-700 dark:bg-slate-800"
-                    >
-                      <Link2 className="h-3.5 w-3.5" />
-                      Compartir
-                    </button>
-                    <span className="hidden rounded border border-slate-200 bg-slate-100 px-2 py-1 font-mono text-xs text-slate-500 sm:inline dark:border-slate-700 dark:bg-slate-800">
-                      50-950
-                    </span>
-                  </div>
-                </div>
-
-                <ScaleSettings />
-
-                <div className="w-full">
-                  <SwatchGrid />
-                </div>
-              </div>
+          {aiInsight && (
+            <div className="lg:col-span-4">
+              <AIInsightCard />
             </div>
+          )}
+        </Reveal>
+      </section>
 
-            <div className="flex flex-col gap-6 lg:col-span-4">
-              <div className="h-full">
-                <AIInsightCard />
-              </div>
-            </div>
-          </div>
-        </section>
+      <ContrastSection />
+      <PopularPalettes />
 
-        <section className="mx-auto max-w-[90rem]">
-          <div className="mb-10 text-center">
-            <h2 className="mb-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Vista Previa en Contexto
-            </h2>
-            <p className="mx-auto max-w-xl text-balance text-slate-500 dark:text-slate-400">
-              Aplicado en una interfaz real.
-            </p>
-          </div>
-          <div className="px-2 sm:px-0">
-            <div className="mt-10">
-              <div className="hidden lg:block">
-                <DashboardPreview />
-              </div>
+      <section className="mx-auto flex max-w-[90rem] flex-col gap-10 px-6 py-20">
+        <Reveal>
+          <h2 className="mx-auto max-w-[1232px] text-[clamp(2.2rem,5vw,4.2rem)] leading-none font-bold tracking-[-0.03em]">
+            Así se ve en una interfaz real.
+          </h2>
+        </Reveal>
+        <div className="hidden lg:block">
+          <DashboardPreview />
+        </div>
+        <div className="block lg:hidden">
+          <MobilePreview />
+        </div>
+      </section>
 
-              <div className="block lg:hidden">
-                <MobilePreview />
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <ContrastMatrix
-        isOpen={matrixOpen}
-        onClose={() => setMatrixOpen(false)}
-      />
+      <ExportSection />
     </AppLayout>
   );
 }

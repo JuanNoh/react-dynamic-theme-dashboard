@@ -16,7 +16,7 @@ export default function PrivacyPage() {
               </div>
 
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-balance text-slate-900 md:text-5xl dark:text-white">
-                Política de
+                Política de{" "}
                 <span className="bg-gradient-to-b from-slate-700 to-black bg-clip-text text-transparent dark:from-white dark:via-slate-200 dark:to-slate-500">
                   Privacidad
                 </span>
@@ -112,7 +112,7 @@ export default function PrivacyPage() {
                     </p>
 
                     {/* Code Snippet Style Quote */}
-                    <div className="rounded-xl border border-slate-800 bg-[#09090b] p-5 shadow-inner">
+                    <div className="rounded-xl border border-slate-800 bg-[#141311] p-5 shadow-inner">
                       <div className="mb-3 flex items-center gap-2 border-b border-white/10 pb-3">
                         <div className="h-3 w-3 rounded-full border border-red-500/50 bg-red-500/20"></div>
                         <div className="h-3 w-3 rounded-full border border-yellow-500/50 bg-yellow-500/20"></div>

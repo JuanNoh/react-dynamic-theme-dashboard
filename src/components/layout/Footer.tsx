@@ -5,13 +5,12 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full border-t border-slate-200/60 bg-white/30 backdrop-blur-xl dark:border-white/5 dark:bg-[#0f172a]/30">
+    <footer className="border-edge mt-auto w-full border-t">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="flex items-center justify-center gap-2 text-sm font-bold tracking-tight text-slate-900 md:justify-start dark:text-white">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-slate-900 dark:bg-white/80"></span>
-              Brand UI Generator
+              Chuwen Palette
             </h3>
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
               © {currentYear} Todos los derechos reservados.

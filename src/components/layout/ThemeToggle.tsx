@@ -26,8 +26,8 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="focus:ring-primary-500 rounded-lg bg-slate-100 p-2 text-slate-600 transition-colors hover:bg-slate-200 focus:ring-2 focus:outline-none dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-      aria-label="Toggle Dark Mode"
+      className="text-soft hover:text-ink flex h-11 w-9 cursor-pointer items-center justify-center rounded-full transition-colors sm:w-11"
+      aria-label="Cambiar entre modo claro y oscuro"
     >
       {isDark ? (
         <Moon className="h-5 w-5" strokeWidth={1.5} />

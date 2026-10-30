@@ -14,8 +14,8 @@ export default function DashboardPreview() {
 
   return (
     <div className="mx-auto w-full max-w-6xl font-sans antialiased">
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl ring-1 shadow-slate-200 ring-slate-900/5 transition-colors duration-300 dark:border-white/10 dark:bg-[#0B0F19] dark:shadow-indigo-500/20 dark:ring-white/5">
-        <div className="flex items-center gap-4 border-b border-slate-200 bg-slate-50 px-4 py-3 transition-colors duration-300 dark:border-white/5 dark:bg-[#0B0F19]">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl ring-1 shadow-slate-200 ring-slate-900/5 transition-colors duration-300 dark:border-white/10 dark:bg-[#141311] dark:shadow-indigo-500/20 dark:ring-white/5">
+        <div className="flex items-center gap-4 border-b border-slate-200 bg-slate-50 px-4 py-3 transition-colors duration-300 dark:border-white/5 dark:bg-[#141311]">
           <div className="flex gap-2">
             <div className="h-3 w-3 rounded-full border border-black/10 bg-[#FF5F57]"></div>
             <div className="h-3 w-3 rounded-full border border-black/10 bg-[#FEBC2E]"></div>
@@ -32,8 +32,8 @@ export default function DashboardPreview() {
           <div className="w-16"></div>
         </div>
 
-        <div className="flex h-[600px] bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-[#0B0F19] dark:text-slate-300">
-          <aside className="flex w-64 flex-col gap-6 border-r border-slate-200 bg-white p-4 transition-colors duration-300 md:flex dark:border-white/5 dark:bg-[#0B0F19]">
+        <div className="flex h-[600px] bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-[#141311] dark:text-slate-300">
+          <aside className="flex w-64 flex-col gap-6 border-r border-slate-200 bg-white p-4 transition-colors duration-300 md:flex dark:border-white/5 dark:bg-[#141311]">
             <div className="flex items-center gap-3 px-2">
               <div className="from-primary-500 to-primary-600 shadow-primary-500/20 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br font-bold text-white shadow-lg">
                 {brandName.charAt(0) || "B"}
@@ -82,7 +82,7 @@ export default function DashboardPreview() {
 
             <div className="mt-auto flex items-center gap-3 border-t border-slate-200 pt-4 dark:border-white/5">
               <div className="relative h-8 w-8 rounded-full bg-slate-200 ring-2 ring-green-500/50 dark:bg-slate-700">
-                <div className="absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500 dark:border-[#0B0F19]"></div>
+                <div className="absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500 dark:border-[#141311]"></div>
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-slate-900 dark:text-white">
@@ -116,7 +116,7 @@ export default function DashboardPreview() {
             </header>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-white/5 dark:bg-[#131825] dark:shadow-none">
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-white/5 dark:bg-[#1e1c18] dark:shadow-none">
                 <div className="absolute top-0 right-0 p-5 opacity-5 transition-opacity group-hover:opacity-10">
                   <CircleDollarSign className="text-primary-500 h-20 w-20" />
                 </div>
@@ -137,7 +137,7 @@ export default function DashboardPreview() {
                 </div>
               </div>
 
-              <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 md:col-span-2 dark:border-white/5 dark:bg-[#131825] dark:shadow-none">
+              <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 md:col-span-2 dark:border-white/5 dark:bg-[#1e1c18] dark:shadow-none">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-semibold text-slate-900 dark:text-white">
                     Crecimiento
@@ -222,7 +222,7 @@ export default function DashboardPreview() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-white/5 dark:bg-[#131825] dark:shadow-none">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-white/5 dark:bg-[#1e1c18] dark:shadow-none">
                 <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">
                   Configuración Rápida
                 </h3>
@@ -256,7 +256,7 @@ export default function DashboardPreview() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 md:col-span-2 dark:border-white/5 dark:bg-[#131825] dark:shadow-none">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-300 md:col-span-2 dark:border-white/5 dark:bg-[#1e1c18] dark:shadow-none">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-semibold text-slate-900 dark:text-white">
                     Transacciones Recientes

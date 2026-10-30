@@ -22,7 +22,7 @@ export default function MobilePreview() {
       <div className="relative overflow-hidden rounded-[3rem] border-[8px] border-slate-900 bg-slate-900 shadow-2xl ring-1 ring-white/10 dark:border-[#1a1a1a] dark:bg-[#1a1a1a]">
         <div className="absolute top-0 left-1/2 z-20 h-7 w-32 -translate-x-1/2 rounded-b-2xl bg-black"></div>
 
-        <div className="h-[700px] w-full overflow-hidden bg-slate-50 transition-colors duration-300 dark:bg-[#0B0F19]">
+        <div className="h-[700px] w-full overflow-hidden bg-slate-50 transition-colors duration-300 dark:bg-[#141311]">
           <div className="flex items-center justify-between px-6 pt-3 pb-2 text-xs font-medium text-slate-900 dark:text-white">
             <span>9:41</span>
             <div className="flex gap-1.5">
@@ -48,7 +48,7 @@ export default function MobilePreview() {
             </div>
             <button className="relative rounded-full bg-white p-2 shadow-sm transition-colors hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10">
               <Bell className="h-5 w-5 text-slate-700 dark:text-slate-300" />
-              <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full border border-white bg-red-500 dark:border-[#0B0F19]"></span>
+              <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full border border-white bg-red-500 dark:border-[#141311]"></span>
             </button>
           </div>
 
@@ -187,7 +187,7 @@ export default function MobilePreview() {
             </div>
           </div>
 
-          <div className="absolute right-0 bottom-0 left-0 border-t border-slate-200 bg-white/90 px-6 py-4 backdrop-blur-lg transition-colors dark:border-white/5 dark:bg-[#0B0F19]/90">
+          <div className="absolute right-0 bottom-0 left-0 border-t border-slate-200 bg-white/90 px-6 py-4 backdrop-blur-lg transition-colors dark:border-white/5 dark:bg-[#141311]/90">
             <div className="flex items-center justify-between">
               {[
                 { icon: Home, active: true },
@@ -200,7 +200,7 @@ export default function MobilePreview() {
                   return (
                     <div
                       key={i}
-                      className="-mt-8 rounded-full bg-slate-50 p-1 dark:bg-[#0B0F19]"
+                      className="-mt-8 rounded-full bg-slate-50 p-1 dark:bg-[#141311]"
                     >
                       <button className="bg-primary-600 shadow-primary-500/40 hover:bg-primary-500 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-transform active:scale-95">
                         <Plus className="h-6 w-6" />

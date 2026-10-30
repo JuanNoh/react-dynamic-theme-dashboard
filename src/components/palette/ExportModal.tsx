@@ -26,8 +26,8 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
         onClick={onClose}
       />
 
-      <div className="animate-in fade-in zoom-in-95 relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl duration-200 dark:border-slate-800 dark:bg-[#0f172a]">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-white p-5 dark:border-slate-800 dark:bg-[#0f172a]">
+      <div className="animate-in fade-in zoom-in-95 relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl duration-200 dark:border-slate-800 dark:bg-[#1e1c18]">
+        <div className="flex items-center justify-between border-b border-slate-100 bg-white p-5 dark:border-slate-800 dark:bg-[#1e1c18]">
           <div className="flex items-center gap-3">
             <div className="rounded-lg border border-slate-200 bg-slate-100 p-2 dark:border-slate-700 dark:bg-slate-800">
               <FileCode className="h-5 w-5 text-slate-600 dark:text-slate-300" />
@@ -49,7 +49,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
           </button>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 p-4 md:flex-row dark:border-slate-800 dark:bg-[#0B0F19]">
+        <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 p-4 md:flex-row dark:border-slate-800 dark:bg-[#141311]">
           <div className="flex w-full overflow-x-auto rounded-xl bg-slate-200/50 p-1 md:w-auto dark:bg-slate-800/50">
             {(["tailwind-v4", "tailwind-v3", "css", "json"] as const).map(
               (tab) => (
@@ -83,7 +83,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
           </div>
         </div>
 
-        <div className="group relative h-[400px] overflow-hidden border-y border-slate-800 bg-[#09090b]">
+        <div className="group relative h-[400px] overflow-hidden border-y border-slate-800 bg-[#141311]">
           <div className="custom-scrollbar h-full overflow-auto p-6">
             <pre className="font-mono text-xs leading-relaxed text-slate-300 sm:text-sm">
               {getContent()}
@@ -102,7 +102,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
           </button>
         </div>
 
-        <div className="flex justify-end gap-3 bg-white p-5 dark:bg-[#0f172a]">
+        <div className="flex justify-end gap-3 bg-white p-5 dark:bg-[#1e1c18]">
           <button
             onClick={onClose}
             className="rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"

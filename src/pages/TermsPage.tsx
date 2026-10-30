@@ -23,7 +23,7 @@ export default function TermsPage() {
               </div>
 
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-balance text-slate-900 md:text-5xl dark:text-white">
-                Términos de
+                Términos de{" "}
                 <span className="bg-gradient-to-b from-slate-700 to-black bg-clip-text text-transparent dark:from-white dark:via-slate-200 dark:to-slate-500">
                   Servicio
                 </span>

@@ -6,7 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import { DEFAULT_PALETTE } from "@/constants/defaults";
+import { DEFAULT_BASE_COLOR } from "@/constants/defaults";
 import { applyPalettesToRoot } from "@/lib/themeVars";
 import { generateLocalPalette, type ScaleOptions } from "@/lib/localPalette";
 import { PaletteContext, type PaletteCtx } from "@/context/PaletteContext";
@@ -19,7 +19,7 @@ import {
 } from "@/types/palette";
 
 export function PaletteProvider({ children }: { children: ReactNode }) {
-  const [baseColor, setBaseColor] = useState(DEFAULT_PALETTE["500"]);
+  const [baseColor, setBaseColor] = useState(DEFAULT_BASE_COLOR);
   const [scaleOptions, setScaleOptionsState] = useState<ScaleOptions>({
     shade: null,
     mode: "tailwind",
@@ -45,7 +45,9 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const [palette, setPalette] = useState<Palette>(DEFAULT_PALETTE);
+  const [palette, setPalette] = useState<Palette>(() =>
+    generateLocalPalette(DEFAULT_BASE_COLOR),
+  );
 
   useEffect(() => {
     applyPalettesToRoot(palette, secondaryPalette);
