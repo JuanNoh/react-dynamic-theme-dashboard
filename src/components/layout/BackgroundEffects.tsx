@@ -1,10 +1,14 @@
+// Un solo resplandor muy tenue teñido con la paleta actual: el fondo acompaña al
+// color sin competir con él. Reemplaza al grano (el svg externo ya daba 402) y a
+// las manchas cian y violeta, que chocaban con cualquier paleta.
 export default function BackgroundEffects() {
   return (
-    <>
-      <div className="pointer-events-none absolute inset-0 z-0 hidden bg-[url(https://grainy-gradients.vercel.app/noise.svg)] opacity-20 mix-blend-overlay brightness-100 contrast-150 dark:block"></div>
-      <div className="animate-pulse-slow pointer-events-none absolute top-[-10%] left-[-10%] hidden h-[40%] w-[40%] rounded-full bg-cyan-500/20 mix-blend-screen blur-[120px] dark:block"></div>
-      <div className="pointer-events-none absolute top-[20%] right-[-5%] hidden h-[30%] w-[30%] rounded-full bg-violet-500/20 mix-blend-screen blur-[100px] dark:block"></div>
-      <div className="pointer-events-none absolute bottom-[-10%] left-[20%] hidden h-[35%] w-[35%] rounded-full bg-fuchsia-500/10 mix-blend-screen blur-[120px] dark:block"></div>
-    </>
+    <div
+      className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[760px] opacity-[0.12] dark:opacity-[0.16]"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 70% at 50% 0%, var(--color-primary-500), transparent 72%)",
+      }}
+    />
   );
 }
